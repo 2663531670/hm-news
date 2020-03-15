@@ -1,11 +1,14 @@
 <template>
-  <div class="login">
+  <div class="hm-login">
     <my-header>登录</my-header>
     <my-logo></my-logo>
     <my-input type="text" placeholder="用户名/手机号" msg="用户名格式错误" v-model="username" :rule=/^\d{5,9}$/ ref = "username"></my-input>
     <my-input type="password" placeholder="密码" msg="密码格式错误" v-model="password"
     :rule = "/^\d{3,12}$/" ref = "password"></my-input>
     <my-button @click="login">登录</my-button>
+    <div class="go-register">
+      没有账号？去<router-link class="link" to = "./register">注册</router-link>
+    </div>
   </div>
 </template>
 
@@ -16,6 +19,10 @@ export default {
       username: '',
       password: ''
     }
+  },
+  created(){
+    this.username = this.$route.params.username
+    this.password = this.$route.params.password
   },
   methods: {
     login() {
@@ -48,4 +55,14 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.hm-login{
+  .go-register{
+    font-size:16px;
+    padding: 0 20px;
+    text-align: right;
+    .link{
+      color:orange;
+    }
+  }
+}
 </style>
