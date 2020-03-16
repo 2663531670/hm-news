@@ -13,10 +13,12 @@ import MyHeader from './common/MyHeader.vue'
 import MyLogo from './common/Logo.vue'
 import MyButton from './common/MyButton.vue'
 import MyInput from './common/HmInput.vue'
+import MyNavbar from './common/MyNavbar.vue'
 Vue.component('my-header', MyHeader)
 Vue.component('my-logo', MyLogo)
 Vue.component('my-button', MyButton)
 Vue.component('my-input', MyInput)
+Vue.component('my-navbar', MyNavbar)
 // 给vue原型上添加axios,使用更方便
 Vue.prototype.$axios = axios
 // 给axios配置公共路径
