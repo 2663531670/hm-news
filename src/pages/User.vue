@@ -17,9 +17,9 @@
         <span class="iconfont iconjiantou1"></span>
       </div>
     </div>
-    <my-navbar title="我的关注" info="关注的用户"></my-navbar>
-    <my-navbar title="我的跟帖" info="跟帖/回复"></my-navbar>
-    <my-navbar title="我的跟帖" info="跟帖/回复"></my-navbar>
+    <my-navbar title="我的关注" info="关注的用户" @click="$router.push('/my-follow')"></my-navbar>
+    <my-navbar title="我的跟帖" info="跟帖/回复" @click="$router.push('/my-comments')"></my-navbar>
+    <my-navbar title="我的收藏" info="文章/视频"></my-navbar>
     <my-navbar title="设置" @click="$router.push('/edit')"></my-navbar>
     <my-navbar title="退出" @click="logout"></my-navbar>
   </div>

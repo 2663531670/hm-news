@@ -15,7 +15,8 @@ import {
   Radio,
   Cell,
   CellGroup,
-  Uploader
+  Uploader,
+  Button
 } from 'vant'
 Vue.use(Toast)
 Vue.use(Dialog)
@@ -25,6 +26,7 @@ Vue.use(Radio)
 Vue.use(Cell)
 Vue.use(CellGroup)
 Vue.use(Uploader)
+Vue.use(Button)
 // -------------------全局注册组件
 import MyHeader from './common/MyHeader.vue'
 import MyLogo from './common/Logo.vue'
@@ -37,8 +39,8 @@ Vue.component('my-button', MyButton)
 Vue.component('my-input', MyInput)
 Vue.component('my-navbar', MyNavbar)
 // ------------------全局注册时间过滤器
-Vue.filter('date', function(input) {
-  return moment(input).format('YYYY-MM-DD')
+Vue.filter('date', function(input, format = 'YYYY-MM-DD') {
+  return moment(input).format(format)
 })
 // 给vue原型上添加axios,使用更方便
 Vue.prototype.$axios = axios
