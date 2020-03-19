@@ -1,5 +1,5 @@
 <template>
-  <div class="my-navbar">
+  <div class="my-navbar" @click="clickFn">
     <div class="left">{{title}}</div>
     <div class="center">{{info}}</div>
     <div class="right">
@@ -16,6 +16,11 @@ export default {
       required: true
     },
     info: String
+  },
+  methods: {
+    clickFn() {
+      this.$emit('click')
+    }
   }
 }
 </script>

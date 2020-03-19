@@ -42,7 +42,12 @@ export default {
           password:this.password
         }
       }).then(res=>{
-        if(res.data.statusCode===200){
+        const {message,statusCode,data} = res.data
+        if(statusCode===200){
+          console.log(res.data)
+          // 登录成功时将响应回来的token和用户id存储在本地
+          localStorage.setItem('token',data.token)
+          localStorage.setItem('user_id',data.user.id)
           this.$toast.success('登录成功')
           this.$router.push('./user')
         }else{

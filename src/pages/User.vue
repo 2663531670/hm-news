@@ -1,16 +1,17 @@
 <template>
   <div class="hm-user">
     <my-header>个人中心</my-header>
-    <div class="info">
+    <div class="info" @click="$router.push('/edit')">
       <div class="left">
-        <img src="http://b-ssl.duitang.com/uploads/item/201504/02/20150402H5812_cshdn.jpeg" alt />
+        <img :src="$axios.defaults.baseURL+info.head_img" alt />
       </div>
       <div class="center">
         <div class="up">
-          <span class="iconfont iconxingbienan"></span>
-          <div>火星网友</div>
+          <span v-if="info.gender===1" class="iconfont iconxingbienan"></span>
+          <span v-else class="iconfont iconxingbienv"></span>
+          <div>{{info.nickname}}</div>
         </div>
-        <div class="down">2019-10-10</div>
+        <div class="down">{{info.create_date|date}}</div>
       </div>
       <div class="right">
         <span class="iconfont iconjiantou1"></span>
@@ -19,12 +20,53 @@
     <my-navbar title="我的关注" info="关注的用户"></my-navbar>
     <my-navbar title="我的跟帖" info="跟帖/回复"></my-navbar>
     <my-navbar title="我的跟帖" info="跟帖/回复"></my-navbar>
-    <my-navbar title="设置"></my-navbar>
+    <my-navbar title="设置" @click="$router.push('/edit')"></my-navbar>
+    <my-navbar title="退出" @click="logout"></my-navbar>
   </div>
 </template>
 
 <script>
-export default {}
+export default {
+  data() {
+    return {
+      info: {}
+    }
+  },
+  created() {
+    const token = localStorage.getItem('token')
+    const user_id = localStorage.getItem('user_id')
+    this.$axios({
+      url: `/user/${user_id}`,
+      method: 'get'
+      // headers: {
+      //   Authorization: token
+      // }
+    }).then(res => {
+      const { statusCode, data } = res.data
+      if (statusCode === 200) {
+        this.info = data
+      }
+    })
+  },
+  methods: {
+    logout() {
+      this.$dialog
+        .confirm({
+          title: '温馨提示',
+          message: '你确定要退出本系统吗'
+        })
+        .then(() => {
+          localStorage.removeItem('token')
+          localStorage.removeItem('user_id')
+          this.$toast('退出成功')
+          this.$router.push('/login')
+        })
+        .catch(() => {
+          this.$toast('取消退出')
+        })
+    }
+  }
+}
 </script>
 
 <style lang="less" scoped>
@@ -49,8 +91,11 @@ export default {}
     padding-left: 20px;
     .up {
       display: flex;
-      span {
+      .iconxingbienan {
         color: #7eaeff;
+      }
+      .iconxingbienv {
+        color: pink;
       }
     }
     .down {

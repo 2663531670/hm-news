@@ -24,7 +24,7 @@ export default {
   methods: {
     register() {
       const res1 = this.$refs.username.validate(this.username)
-      const res2 = this.$refs.nickname.validate(this.nickname)
+      const res2 = this.$refs.nickname.validate(this.nickname) 
       const res3 = this.$refs.password.validate(this.password)
       if(!res1||!res2||!res3){
         return
