@@ -29,40 +29,36 @@ export default {
     this.getFollowList()
   },
   methods: {
-    getFollowList() {
-      this.$axios({
+    async getFollowList() {
+      const res = await this.$axios({
         url: `/user_follows`,
         method: 'get'
-      }).then(res => {
-        const { statusCode, data } = res.data
-        if (statusCode === 200) {
-          this.list = data
-          console.log(this.list)
-        }
       })
+      const { statusCode, data } = res.data
+      if (statusCode === 200) {
+        this.list = data
+        console.log(this.list)
+      }
     },
-    unFollow(id) {
-      this.$dialog
-        .confirm({
+    async unFollow(id) {
+      try {
+        await this.$dialog.confirm({
           title: '温馨提示',
           message: '你确定要取消关注该用户吗'
         })
-        .then(() => {
-          this.$axios({
-            url: `/user_unfollow/${id}`,
-            method: 'get'
-          }).then(res => {
-            console.log(res.data)
-            const { statusCode, message } = res.data
-            if (statusCode === 200) {
-              this.$toast(message)
-              this.getFollowList()
-            }
-          })
+        const res = await this.$axios({
+          url: `/user_unfollow/${id}`,
+          method: 'get'
         })
-        .catch(() => {
-          this.$toast('取消操作成功')
-        })
+        console.log(res.data)
+        const { statusCode, message } = res.data
+        if (statusCode === 200) {
+          this.$toast(message)
+          this.getFollowList()
+        }
+      } catch {
+        this.$toast('取消操作')
+      }
     }
   }
 }

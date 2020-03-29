@@ -78,39 +78,37 @@ export default {
     }
   },
   methods: {
-    getInfo() {
+    async getInfo() {
       const user_id = localStorage.getItem('user_id')
       const token = localStorage.getItem('token')
-      this.$axios({
+      const res = await this.$axios({
         url: `/user/${user_id}`,
         method: 'get'
         // headers: {
         //   Authorization: token
         // }
-      }).then(res => {
-        const { statusCode, data } = res.data
-        if (statusCode === 200) {
-          this.info = data
-        }
       })
+      const { statusCode, data } = res.data
+      if (statusCode === 200) {
+        this.info = data
+      }
     },
-    editUser(data) {
+    async editUser(data) {
       const user_id = localStorage.getItem('user_id')
       const token = localStorage.getItem('token')
-      this.$axios({
+      const res = await this.$axios({
         url: `user_update/${user_id}`,
         method: 'post',
         // headers: {
         //   Authorization: token
         // },
         data
-      }).then(res => {
-        const { statusCode, message } = res.data
-        if (statusCode === 200) {
-          this.getInfo()
-          this.$toast.success(message)
-        }
       })
+      const { statusCode, message } = res.data
+      if (statusCode === 200) {
+        this.getInfo()
+        this.$toast.success(message)
+      }
     },
     showNickname() {
       this.show = true
@@ -171,7 +169,7 @@ export default {
       // })
     },
     crop() {
-      this.$refs.cropper.getCropBlob(data => {
+      this.$refs.cropper.getCropBlob(async data => {
         if (data.size / 1024 > 200) {
           this.$toast('图片尺寸过大')
           return
@@ -182,19 +180,18 @@ export default {
         }
         const fd = new FormData()
         fd.append('file', data)
-        this.$axios({
+        const res = await this.$axios({
           url: '/upload',
           method: 'post',
           data: fd
-        }).then(res => {
-          const { statusCode, data } = res.data
-          if (statusCode === 200) {
-            this.editUser({
-              head_img: data.url
-            })
-            this.showCropper = false
-          }
         })
+        const { statusCode, data: data1 } = res.data
+        if (statusCode === 200) {
+          this.editUser({
+            head_img: data1.url
+          })
+          this.showCropper = false
+        }
       })
     },
     cancel() {

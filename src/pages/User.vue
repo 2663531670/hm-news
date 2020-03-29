@@ -19,8 +19,9 @@
     </div>
     <my-navbar title="我的关注" info="关注的用户" @click="$router.push('/my-follow')"></my-navbar>
     <my-navbar title="我的跟帖" info="跟帖/回复" @click="$router.push('/my-comments')"></my-navbar>
-    <my-navbar title="我的收藏" info="文章/视频"></my-navbar>
+    <my-navbar title="我的收藏" info="文章/视频" @click="$router.push('/my-star')"></my-navbar>
     <my-navbar title="设置" @click="$router.push('/edit')"></my-navbar>
+    <my-navbar title="首页" @click="$router.push('/')"></my-navbar>
     <my-navbar title="退出" @click="logout"></my-navbar>
   </div>
 </template>
@@ -32,38 +33,35 @@ export default {
       info: {}
     }
   },
-  created() {
+  async created() {
     const token = localStorage.getItem('token')
     const user_id = localStorage.getItem('user_id')
-    this.$axios({
+    const res = await this.$axios({
       url: `/user/${user_id}`,
       method: 'get'
       // headers: {
       //   Authorization: token
       // }
-    }).then(res => {
-      const { statusCode, data } = res.data
-      if (statusCode === 200) {
-        this.info = data
-      }
     })
+    const { statusCode, data } = res.data
+    if (statusCode === 200) {
+      this.info = data
+    }
   },
   methods: {
-    logout() {
-      this.$dialog
-        .confirm({
+    async logout() {
+      try {
+        await this.$dialog.confirm({
           title: '温馨提示',
           message: '你确定要退出本系统吗'
         })
-        .then(() => {
-          localStorage.removeItem('token')
-          localStorage.removeItem('user_id')
-          this.$toast('退出成功')
-          this.$router.push('/login')
-        })
-        .catch(() => {
-          this.$toast('取消退出')
-        })
+        localStorage.removeItem('token')
+        localStorage.removeItem('user_id')
+        this.$toast('退出成功')
+        this.$router.push('/login')
+      } catch {
+        this.$toast('取消操作')
+      }
     }
   }
 }

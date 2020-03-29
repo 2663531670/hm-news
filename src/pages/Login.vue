@@ -23,9 +23,10 @@ export default {
   created(){
     this.username = this.$route.params.username
     this.password = this.$route.params.password
+    console.log(this.$route)
   },
   methods: {
-    login() {
+   async login() {
       // 点击让所有表单元素进行校验
       const res1 = this.$refs.username.validate(this.username)
       const res2 = this.$refs.password.validate(this.password)
@@ -34,14 +35,14 @@ export default {
       if(!res1||!res2){
         return
       }
-      this.$axios({
+    const res =await this.$axios({
         url:'/login',
         method:'post',
         data:{
           username:this.username,
           password:this.password
         }
-      }).then(res=>{
+      })
         const {message,statusCode,data} = res.data
         if(statusCode===200){
           console.log(res.data)
@@ -49,11 +50,16 @@ export default {
           localStorage.setItem('token',data.token)
           localStorage.setItem('user_id',data.user.id)
           this.$toast.success('登录成功')
+          if(this.$route.params.back){
+            this.$router.back()
+            return
+          }
           this.$router.push('./user')
         }else{
           this.$toast.fail('用户名或密码错误')
         }
-      })
+      
+     
     }
   }
 }
