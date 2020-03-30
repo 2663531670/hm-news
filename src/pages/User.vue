@@ -22,6 +22,7 @@
     <my-navbar title="我的收藏" info="文章/视频" @click="$router.push('/my-star')"></my-navbar>
     <my-navbar title="设置" @click="$router.push('/edit')"></my-navbar>
     <my-navbar title="首页" @click="$router.push('/')"></my-navbar>
+    <my-navbar title="栏目管理" @click="$router.push('/tab-edit')"></my-navbar>
     <my-navbar title="退出" @click="logout"></my-navbar>
   </div>
 </template>

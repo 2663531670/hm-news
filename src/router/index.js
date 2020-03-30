@@ -10,6 +10,8 @@ import MyStar from '../pages/MyStar.vue'
 import Home from '../pages/Home.vue'
 import PostDetail from '../pages/PostDetail.vue'
 import Test from '../pages/Test.vue'
+import TabEdit from '../pages/TabEdit.vue'
+import Search from '../pages/Search.vue'
 Vue.use(VueRouter)
 // 解决导航重复的错误
 const originalPush = VueRouter.prototype.push
@@ -30,7 +32,9 @@ const router = new VueRouter({
     { path: '/my-comments', name: 'my-comments', component: MyComments },
     { path: '/my-star', name: 'my-star', component: MyStar },
     { path: '/post-detail/:id', name: 'post-detail', component: PostDetail },
-    { path: '/test', name: 'test', component: Test }
+    { path: '/test', name: 'test', component: Test },
+    { path: '/tab-edit', name: 'tab-list', component: TabEdit },
+    { path: '/search', name: 'search', component: Search }
   ]
 })
 router.beforeEach(function(to, from, next) {

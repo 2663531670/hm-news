@@ -19,7 +19,8 @@ import {
   Button,
   List,
   Tab,
-  Tabs
+  Tabs,
+  PullRefresh
 } from 'vant'
 Vue.use(Toast)
 Vue.use(Dialog)
@@ -33,6 +34,7 @@ Vue.use(Button)
 Vue.use(List)
 Vue.use(Tab)
 Vue.use(Tabs)
+Vue.use(PullRefresh)
 // -------------------全局注册组件
 import MyHeader from './common/MyHeader.vue'
 import MyLogo from './common/Logo.vue'

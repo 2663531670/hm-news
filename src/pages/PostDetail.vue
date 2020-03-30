@@ -90,10 +90,6 @@ export default {
   created() {
     this.getPostDetail()
     this.getCommentList()
-    console.log('详情页被创建了')
-  },
-  destroyed() {
-    console.log('详情页被销毁了')
   },
   methods: {
     async getPostDetail() {
@@ -102,7 +98,6 @@ export default {
       const { statusCode, data } = res.data
       if (statusCode === 200) {
         this.detail = data
-        // console.log(this.detail)
       }
     },
     async follow(id) {

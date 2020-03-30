@@ -5,7 +5,7 @@
         <span class="iconfont iconnew"></span>
       </div>
       <div class="center">
-        <div class="search">
+        <div class="search" @click="$router.push('/search')">
           <span class="iconfont iconsearch"></span>
           <span class="text">搜索新闻</span>
         </div>
@@ -18,16 +18,19 @@
     <van-tabs v-model="active" swipeable animated sticky>
       <van-tab v-for="item in tabList" :key="item.id" :title="item.name">
         <div class="postList">
-          <van-list
-            v-model="loading"
-            :finished="finished"
-            :immediate-check="false"
-            @load="onload"
-            finished-text="没有更多了"
-            :offset="20"
-          >
-            <my-post v-for="post in postList" :key="post.id" :post="post"></my-post>
-          </van-list>
+          <!-- 下拉刷新 -->
+          <van-pull-refresh v-model="isLoading" success-text="刷新成功" @refresh="onRefresh">
+            <van-list
+              v-model="loading"
+              :finished="finished"
+              :immediate-check="false"
+              @load="onload"
+              finished-text="没有更多了"
+              :offset="20"
+            >
+              <my-post v-for="post in postList" :key="post.id" :post="post"></my-post>
+            </van-list>
+          </van-pull-refresh>
         </div>
       </van-tab>
     </van-tabs>
@@ -36,6 +39,7 @@
 
 <script>
 export default {
+  name: 'home',
   data() {
     return {
       active: 0,
@@ -44,15 +48,21 @@ export default {
       loading: false,
       finished: false,
       pageIndex: 1,
-      pageSize: 5
+      pageSize: 5,
+      isLoading: false
     }
   },
   created() {
+    const active = localStorage.getItem('activeTabs')
+    const deactive = localStorage.getItem('deactiveTabs')
+    if (active && deactive) {
+      this.tabList = JSON.parse(localStorage.getItem('activeTabs'))
+      this.getPostList(this.tabList[this.active].id)
+      // console.log(this.tabList[this.active].id)
+      // console.log(this.tabList[this.active])
+      return
+    }
     this.getTabList()
-    console.log('home组件被创建了')
-  },
-  destroyed() {
-    console.log('home组件被销毁了')
   },
   methods: {
     async getTabList() {
@@ -72,7 +82,6 @@ export default {
           pageSize: this.pageSize
         }
       })
-      // console.log(res.data)
       const { statusCode, data } = res.data
       if (statusCode === 200) {
         if (this.postList.length > 0 && this.pageIndex === 1) {
@@ -92,6 +101,17 @@ export default {
         this.pageIndex++
         this.getPostList(id)
       }, 1000)
+    },
+    onRefresh() {
+      this.pageIndex = 1
+      this.postList = []
+      this.loading = true
+      this.finished = false
+      setTimeout(() => {
+        const id = this.tabList[this.active].id
+        this.getPostList(id)
+        this.isLoading = false
+      }, 500)
     }
   },
 
